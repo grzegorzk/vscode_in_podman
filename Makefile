@@ -30,10 +30,10 @@ build:
 		-t ${ARCH_IMAGE} .;
 
 run:
-	@ ${DOCKER} run \
+	@ ${DOCKER} run -d --rm \
 		${WITH_USERNS} \
 		--security-opt label=type:container_runtime_t \
-		--net=host -it --rm \
+		--net=host \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /dev/dri:/dev/dri \
 		-v $(HOME)/.Xauthority:"/home/${UNAME}/.Xauthority":Z \

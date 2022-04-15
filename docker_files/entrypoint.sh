@@ -4,15 +4,18 @@ set -e
 
 echo "Installing extensions"
 
+enabled_apis="--enable-proposed-api Remote.contribViewsRemote"
 for ext in "${EXTENSIONS_DIR}"/*.vsix; do
     echo "Installing ${ext}"
     code --install-extension "${ext}"
+    ext_api="$(basename "${ext}" | sed -e "s/\([^\.]*\..*\)-[0-9]*.*/\1/g")"
+    enabled_apis="${enabled_apis} --enable-proposed-api ${ext_api}"
 done
 
 echo "Extensions installed"
-echo "Running code"
+echo "Running code with enabled apis: '${enabled_apis}'"
 
-/usr/sbin/code
+/usr/sbin/code ${enabled_apis}
 code_pid=$(ps -ef | grep "usr/lib/code/code.js" | tr -s ' ' | cut -d ' ' -f2 | head -n 1)
 
 _term() {
