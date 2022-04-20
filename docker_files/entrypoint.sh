@@ -32,7 +32,7 @@ _term() {
             if [ -z "$(ps -q "$code_pid" -o comm=)" ]; then
                 break;
             fi;
-            echo "Waiting for code-oss to terminate...";
+            echo "Waiting for VSCode to terminate...";
             sleep 1;
         done
 

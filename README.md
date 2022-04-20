@@ -1,4 +1,4 @@
-# Run OSS Code in unprivileged podman container
+# Run VSCode in unprivileged podman container
 
 * root account not involved
 
