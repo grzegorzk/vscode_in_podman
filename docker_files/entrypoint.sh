@@ -2,21 +2,27 @@
 
 set -e
 
+chmod 0500 ~/.ssh
+chmod 0400 ~/.ssh/*
+touch ~/.ssh/config
+chmod 0700 ~/.ssh/config
+
 echo "Installing extensions"
-
-enabled_apis="--enable-proposed-api Remote.contribViewsRemote"
+CUSTOM_EXTENSIONS_DIR=~/.config/Code/extensions
+mkdir -p "${CUSTOM_EXTENSIONS_DIR}"
 for ext in "${EXTENSIONS_DIR}"/*.vsix; do
-    echo "Installing ${ext}"
-    code --install-extension "${ext}"
     ext_api="$(basename "${ext}" | sed -e "s/\([^\.]*\..*\)-[0-9]*.*/\1/g")"
-    enabled_apis="${enabled_apis} --enable-proposed-api ${ext_api}"
+    if [ -n "$(code --extensions-dir="${CUSTOM_EXTENSIONS_DIR}" --list-extensions | grep "${ext_api}")" ]; then
+        echo "${ext} already installed, skipping to the next extension."
+        continue
+    fi
+    echo "Installing ${ext}"
+    code --extensions-dir="${CUSTOM_EXTENSIONS_DIR}" --install-extension "${ext}"
 done
-
 echo "Extensions installed"
-echo "Running code with enabled apis: '${enabled_apis}'"
 
-/usr/sbin/code ${enabled_apis}
-code_pid=$(ps -ef | grep "usr/lib/code/code.js" | tr -s ' ' | cut -d ' ' -f2 | head -n 1)
+/usr/sbin/code --verbose --extensions-dir="${CUSTOM_EXTENSIONS_DIR}"
+code_pid=$(ps -ef | grep "/opt/visual-studio-code/code" | tr -s ' ' | cut -d ' ' -f2 | head -n 1)
 
 _term() {
     echo "Termination initiated (probably by ctrl+c)"
