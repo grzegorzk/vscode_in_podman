@@ -21,7 +21,7 @@ for ext in "${EXTENSIONS_DIR}"/*.vsix; do
 done
 echo "Extensions installed"
 
-/usr/sbin/code --extensions-dir="${CUSTOM_EXTENSIONS_DIR}"
+/usr/sbin/code --verbose --extensions-dir="${CUSTOM_EXTENSIONS_DIR}"
 code_pid=$(ps -ef | grep "/opt/visual-studio-code/code" | tr -s ' ' | cut -d ' ' -f2 | head -n 1)
 
 _term() {

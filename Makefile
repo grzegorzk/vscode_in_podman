@@ -33,7 +33,8 @@ build:
 
 run:
 	@ ${DOCKER} run -d --rm \
-		--network none \
+		--shm-size 2g \
+		--network host \
 		--name "${CODE_CONTAINER}" \
 		${WITH_USERNS} \
 		--security-opt label=type:container_runtime_t \
