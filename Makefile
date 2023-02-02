@@ -1,3 +1,4 @@
+#!/usr/bin/env make
 SHELL=/bin/bash
 
 HOST_PATH_TO_PROJECT=$${HOST_PATH_TO_PROJECT?Please provide HOST_PATH_TO_PROJECT}
@@ -10,6 +11,10 @@ CODE_CONTAINER=code_arch
 UUID=$(shell id -u)
 GUID=$(shell id -g)
 UNAME=$(shell whoami)
+
+IMG_BUILD_DAY=$(shell date +%d)
+IMG_BUILD_MONTH=$(shell date +%m)
+IMG_BUILD_YEAR=$(shell date +%Y)
 
 WITH_USERNS=$$(eval [ "podman" == "${DOCKER}" ] && echo "--userns=keep-id")
 
@@ -30,6 +35,7 @@ build:
 		--build-arg GROUP_ID=${GUID} \
 		--build-arg USER_NAME=${UNAME} \
 		-t ${ARCH_IMAGE} .;
+	@ ${DOCKER} tag ${ARCH_IMAGE} ${ARCH_IMAGE}_${IMG_BUILD_YEAR}${IMG_BUILD_MONTH}${IMG_BUILD_DAY}
 
 run:
 	@ ${DOCKER} run -d --rm \
