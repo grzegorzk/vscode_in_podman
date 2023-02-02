@@ -78,6 +78,9 @@ To check if seccomp.json might be an issue add `--security-opt seccomp=unconfine
 
 # Thanks
 
+People building Code
+* https://code.visualstudio.com/
+
 People maintaining ArchLinux:
 * https://archlinux.org/
 Authors of these ArchWiki pages:
