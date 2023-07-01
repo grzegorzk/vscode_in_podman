@@ -38,7 +38,8 @@ build:
 	@ ${DOCKER} tag ${ARCH_IMAGE} ${ARCH_IMAGE}_${IMG_BUILD_YEAR}${IMG_BUILD_MONTH}${IMG_BUILD_DAY}
 
 run:
-	@ ${DOCKER} run -d --rm \
+	@ xhost +local: \
+	&& ${DOCKER} run -d --rm \
 		--shm-size 2g \
 		--network host \
 		--name "${CODE_CONTAINER}" \
