@@ -38,8 +38,7 @@ build:
 	@ ${DOCKER} tag ${ARCH_IMAGE} ${ARCH_IMAGE}_${IMG_BUILD_YEAR}${IMG_BUILD_MONTH}${IMG_BUILD_DAY}
 
 run:
-	@ xhost +local: \
-	&& ${DOCKER} run -d --rm \
+	@ ${DOCKER} run -d --rm \
 		--shm-size 2g \
 		--network host \
 		--name "${CODE_CONTAINER}" \
@@ -50,6 +49,8 @@ run:
 		-v "$(HOME)"/.Xauthority:"/home/${UNAME}/.Xauthority":Z \
 		--device /dev/video0 \
 		-e DISPLAY \
+		-e XAUTHORITY \
+		-v ${XAUTHORITY}:${XAUTHORITY} \
 		-v /etc/machine-id:/etc/machine-id \
 		-v "$(HOME)"/.config/pulse/cookie:/home/${UNAME}/.config/pulse/cookie \
 		-v /run/user/${UUID}/pulse:/run/user/${UUID}/pulse \
