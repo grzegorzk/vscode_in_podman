@@ -8,6 +8,7 @@ RUN pacman -Sy --disable-download-timeout --noconfirm \
         binutils \
         fakeroot \
         git \
+        gnome-keyring \
         mesa \
         openssh \
         sudo \

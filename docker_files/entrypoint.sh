@@ -21,7 +21,16 @@ for ext in "${EXTENSIONS_DIR}"/*.vsix; do
 done
 echo "Extensions installed"
 
-/usr/sbin/code --verbose --extensions-dir="${CUSTOM_EXTENSIONS_DIR}"
+# NOTE: setting up gnome keyring, https://unix.stackexchange.com/questions/473528/how-do-you-enable-the-secret-tool-command-backed-by-gnome-keyring-libsecret-an#answer-548005
+eval "$(dbus-launch --sh-syntax)"
+mkdir -p ~/.cache
+mkdir -p ~/.local/share/keyrings
+eval "$(printf '\n' | gnome-keyring-daemon --unlock)"
+eval "$(printf '\n' | /usr/bin/gnome-keyring-daemon --start)"
+
+# NOTE: issue with keyring https://github.com/microsoft/vscode/issues/187338
+
+/usr/sbin/code --verbose --extensions-dir="${CUSTOM_EXTENSIONS_DIR}" --password-store="gnome"
 code_pid=$(ps -ef | grep "/opt/visual-studio-code/code" | tr -s ' ' | cut -d ' ' -f2 | head -n 1)
 
 _term() {
