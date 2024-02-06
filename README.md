@@ -71,6 +71,16 @@ Below example shows how settings can be added:
 }
 ```
 
+# Downgrading
+
+If you need to run downgraded version you can look up relevant commit [on AUR page of visual-studio-code-bin package](https://aur.archlinux.org/cgit/aur.git/log/?h=visual-studio-code-bin)
+
+```bash
+make build VSCODE_PKGBUILD_VERSION=<your PKGBUILD hash>
+make run
+```
+
+
 # Troubleshooting
 
 * If you are using podman and fall into weird issues while running this container please check if your `/etc/containers/seccomp.json` diverted from https://raw.githubusercontent.com/containers/common/main/pkg/seccomp/seccomp.json
