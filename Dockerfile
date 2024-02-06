@@ -1,7 +1,9 @@
 ARG GROUP_ID=1001
 ARG USER_ID=1001
 
-FROM docker.io/techgk/arch:latest AS x11_arch
+ARG ARCH_BASE_IMAGE
+
+FROM docker.io/${ARCH_BASE_IMAGE} AS x11_arch
 
 RUN pacman -Sy --disable-download-timeout --noconfirm \
         base-devel \
@@ -28,6 +30,7 @@ RUN sed -i -- 's/#[ ]*\(%wheel[ ]*ALL[ ]*=[ ]*([ ]*ALL[ ]*:[ ]*ALL[ ]*)[ ]*NOPAS
 ARG GROUP_ID
 ARG USER_ID
 ARG USER_NAME
+ARG VSCODE_PKGBUILD_VERSION
 
 RUN groupadd -g $GROUP_ID $USER_NAME \
     && useradd -u $USER_ID -g $GROUP_ID -G wheel -m $USER_NAME
@@ -41,11 +44,18 @@ RUN cd /tmp \
     && cd / \
     && rm -r /tmp/trizen
 
-RUN gpg --recv-keys B26995E310250568 \
+RUN cd /tmp \
+    && gpg --recv-keys B26995E310250568 \
     && trizen -S --noconfirm \
-        visual-studio-code-bin \
         python38 \
-        python39
+        python39 \
+    && trizen -G visual-studio-code-bin \
+    && cd /tmp/visual-studio-code-bin \
+    && git checkout ${VSCODE_PKGBUILD_VERSION} \
+    && cd /tmp \
+    && trizen -S --nopull --noconfirm --local visual-studio-code-bin \
+    && rm -rf /tmp/visual-studio-code-bin \
+    && trizen -Scc --aur --noconfirm
 
 USER root
 

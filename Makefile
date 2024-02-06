@@ -6,15 +6,14 @@ CONTAINER_PATH_TO_MOUNT_PROJECT=$${CONTAINER_PATH_TO_MOUNT_PROJECT?Please provid
 
 DOCKER=podman
 
-ARCH_IMAGE=x11_arch
-CODE_CONTAINER=code_arch
+OSS_CODE_IMAGE=oss_code_arch
+OSS_CODE_CONTAINER=oss_code_arch
 UUID=$(shell id -u)
 GUID=$(shell id -g)
 UNAME=$(shell whoami)
 
-IMG_BUILD_DAY=$(shell date +%d)
-IMG_BUILD_MONTH=$(shell date +%m)
-IMG_BUILD_YEAR=$(shell date +%Y)
+ARCH_BASE_IMAGE=techgk/arch:latest
+VSCODE_PKGBUILD_VERSION=master
 
 WITH_USERNS=$$(eval [ "podman" == "${DOCKER}" ] && echo "--userns=keep-id")
 
@@ -34,14 +33,15 @@ build:
 		--build-arg USER_ID=${UUID} \
 		--build-arg GROUP_ID=${GUID} \
 		--build-arg USER_NAME=${UNAME} \
-		-t ${ARCH_IMAGE} .;
-	@ ${DOCKER} tag ${ARCH_IMAGE} ${ARCH_IMAGE}_${IMG_BUILD_YEAR}${IMG_BUILD_MONTH}${IMG_BUILD_DAY}
+		--build-arg ARCH_BASE_IMAGE=${ARCH_BASE_IMAGE} \
+		--build-arg VSCODE_PKGBUILD_VERSION=${VSCODE_PKGBUILD_VERSION} \
+		-t ${OSS_CODE_IMAGE} .;
 
 run:
 	@ ${DOCKER} run -d --rm \
 		--shm-size 2g \
 		--network host \
-		--name "${CODE_CONTAINER}" \
+		--name "${OSS_CODE_CONTAINER}" \
 		${WITH_USERNS} \
 		--security-opt label=type:container_runtime_t \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -63,10 +63,10 @@ run:
 		-v "${CURDIR}"/docker_files/extensions:/extensions \
 		-v "${CURDIR}"/.config:/home/${UNAME}/.config \
 		-v "${HOST_PATH_TO_PROJECT}":"${CONTAINER_PATH_TO_MOUNT_PROJECT}" \
-		${ARCH_IMAGE}
+		${OSS_CODE_IMAGE}
 
 logs:
-	@ ${DOCKER} logs -f "${CODE_CONTAINER}"
+	@ ${DOCKER} logs -f "${OSS_CODE_CONTAINER}"
 
 bash:
-	@ ${DOCKER} exec -it "${CODE_CONTAINER}" /bin/bash
+	@ ${DOCKER} exec -it "${OSS_CODE_CONTAINER}" /bin/bash
