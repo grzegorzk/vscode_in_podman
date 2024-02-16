@@ -81,10 +81,10 @@ make run
 ```
 
 Example:
- - if you happen to work remotely with code hosted on Ubuntu 18.03 and wanted to build VSCode downgraded to version 1.86.2, you can do this by building the image like below:
+ - if you happen to work remotely with code hosted on Ubuntu 18.03 and wanted to build VSCode downgraded to version 1.85.2, you can do this by building the image like below:
 
 ```bash
-make build VSCODE_VERSION=902d1f5c27a958c47afd4d18a084478c03bdcb25
+make build VSCODE_PKGBUILD_VERSION=902d1f5c27a958c47afd4d18a084478c03bdcb25
 ```
 
 # Troubleshooting
