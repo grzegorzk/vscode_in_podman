@@ -4,6 +4,9 @@ SHELL=/bin/bash
 HOST_PATH_TO_PROJECT=$${HOST_PATH_TO_PROJECT?Please provide HOST_PATH_TO_PROJECT}
 CONTAINER_PATH_TO_MOUNT_PROJECT=$${CONTAINER_PATH_TO_MOUNT_PROJECT?Please provide CONTAINER_PATH_TO_MOUNT_PROJECT}
 
+NO_NETWORK=
+NETWORK=$$([ -n "${NO_NETWORK}" ] && echo "none" || echo "host")
+
 DOCKER=podman
 
 OSS_CODE_IMAGE=oss_code_arch
@@ -40,7 +43,7 @@ build:
 run:
 	@ ${DOCKER} run -d --rm \
 		--shm-size 2g \
-		--network host \
+		--network ${NETWORK} \
 		--name "${OSS_CODE_CONTAINER}" \
 		${WITH_USERNS} \
 		--security-opt label=type:container_runtime_t \
