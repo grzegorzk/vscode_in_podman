@@ -71,6 +71,14 @@ Below example shows how settings can be added:
 }
 ```
 
+# Run without network
+
+If you want network not to be available from within the container, set `NO_NETWORK=yes` when running:
+
+```bash
+make run NO_NETWORK=yes
+```
+
 # Downgrading
 
 If you need to run downgraded version you can look up relevant commit [on AUR page of visual-studio-code-bin package](https://aur.archlinux.org/cgit/aur.git/log/?h=visual-studio-code-bin)
@@ -86,6 +94,19 @@ Example:
 ```bash
 make build VSCODE_PKGBUILD_VERSION=902d1f5c27a958c47afd4d18a084478c03bdcb25
 ```
+
+# Run with nvidia GPU
+
+If you require access to nvidia GPU you need to build and run using `WITH_NVIDIA_GPU=yes`
+
+```bash
+make build WITH_NVIDIA_GPU=yes
+make run WITH_NVIDIA_GPU=yes
+```
+
+You might have to [run nvidia-ctk](https://wiki.archlinux.org/title/Podman#NVIDIA_GPUs)
+
+Old nvidia GPUs are currently not supported
 
 # Troubleshooting
 

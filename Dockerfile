@@ -20,8 +20,16 @@ RUN pacman -Sy --disable-download-timeout --noconfirm \
         python \
         xorg-server \
         xorg-apps \
-    && rm -rf /var/cache/pacman/pkg/* \
     && /bin/bash /root/skim.sh
+
+ARG WITH_CUDA
+
+RUN [ -n "${WITH_CUDA}" ] \
+    && pacman -Sy --disable-download-timeout --noconfirm \
+        nvidia \
+        cuda \
+        cudnn \
+    || echo "Not installing CUDA"
 
 RUN sed -i -- 's/#[ ]*\(%wheel[ ]*ALL[ ]*=[ ]*([ ]*ALL[ ]*:[ ]*ALL[ ]*)[ ]*NOPASSWD[ ]*:[ ]*ALL\)$/\1/gw /tmp/sed.done' /etc/sudoers \
     && [ -z "$(cat /tmp/sed.done | wc -l)" ] && echo "Failed to enable sudo for wheel group" && exit 1 \
