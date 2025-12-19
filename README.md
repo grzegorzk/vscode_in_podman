@@ -113,6 +113,17 @@ Old nvidia GPUs are currently not supported
 * If you are using podman and fall into weird issues while running this container please check if your `/etc/containers/seccomp.json` diverted from https://raw.githubusercontent.com/containers/common/main/pkg/seccomp/seccomp.json
 To check if seccomp.json might be an issue add `--security-opt seccomp=unconfined` to `podman run` options. It is also possible to use downloaded seccomp.json by adding following to `podman run` options: `--security-opt seccomp=/path/to/the/seccomp.json`
 
+
+* If you get error similar to below:
+```
+Error: crun: cannot stat `/usr/lib/libnvidia-egl-wayland.so.1.1.20`: No such file or directory: OCI runtime attempted to invoke a command that was not found
+```
+Try:
+
+```bash
+nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+```
+
 # Thanks
 
 People building Code
