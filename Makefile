@@ -36,7 +36,7 @@ list:
 
 build:
 	@ ${DOCKER} build \
-                --net=pasta:-4 \
+		--net=pasta:-4 \
 		--build-arg USER_ID=${UUID} \
 		--build-arg GROUP_ID=${GUID} \
 		--build-arg USER_NAME=${UNAME} \
