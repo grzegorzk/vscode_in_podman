@@ -6,6 +6,8 @@ ARG ARCH_BASE_IMAGE
 FROM docker.io/${ARCH_BASE_IMAGE} AS x11_arch
 
 RUN pacman -Sy --disable-download-timeout --noconfirm \
+        archlinux-keyring \
+    && pacman -Sy --disable-download-timeout --noconfirm \
         base-devel \
         binutils \
         fakeroot \
@@ -55,8 +57,8 @@ RUN cd /tmp \
 RUN cd /tmp \
     && gpg --recv-keys B26995E310250568 \
     && trizen -S --noconfirm \
-        python38 \
-        python39 \
+        python311 \
+        python312 \
     && trizen -G visual-studio-code-bin \
     && cd /tmp/visual-studio-code-bin \
     && git checkout ${VSCODE_PKGBUILD_VERSION} \
