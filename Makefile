@@ -55,11 +55,10 @@ run:
 		--security-opt label=type:container_runtime_t \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /dev/dri:/dev/dri \
-		-v "$(HOME)"/.Xauthority:"/home/${UNAME}/.Xauthority":Z \
+		-v "$(XAUTHORITY)":"$(XAUTHORITY)":Z \
 		--device /dev/video0 \
 		-e DISPLAY \
 		-e XAUTHORITY \
-		-v ${XAUTHORITY}:${XAUTHORITY} \
 		-v /etc/machine-id:/etc/machine-id \
 		-v "$(HOME)"/.config/pulse/cookie:/home/${UNAME}/.config/pulse/cookie \
 		-v /run/user/${UUID}/pulse:/run/user/${UUID}/pulse \
