@@ -7,27 +7,55 @@
 * Improve host system isolation when running such complex system
 * Easily allow turning off access to host network for this particular program
 
-# Run
+## Requirements
 
-If you have podman:
+- [Podman](https://podman.io/) or [Docker](https://www.docker.com/) (installed and configured)
+- GNU Make
+
+## Getting Started
+
+Note: all `make` commands below make use of Podman by default. Pass `Docker=docker` if you prefer to run in docker container.
+
+### Build the image
 
 ```bash
 make build
-make run
 ```
 
-If you prefer docker:
+### Add below function at the end of your .bashrc, replace `/path/to/vscode_in_podman` with full path where vscode_in_podman was cloned to
 
 ```bash
-make build DOCKER=docker
-make run DOCKER=docker
+function code {
+    vscode_dir=/path/to/vscode_in_podman
+    if [ -z "$1" ]; then
+        echo "Call 'code .' or 'code /path/to/project'";
+    else
+        proj_dir=$(cd "$1" && pwd);
+        make -s -C $vscode_dir run HOST_PATH_TO_PROJECT="$proj_dir" CONTAINER_PATH_TO_MOUNT_PROJECT="$proj_dir";
+    fi;
+}
 ```
 
+Once updated:
+
+```bash
+source ~/.bashrc
+```
+
+You can then call code as you would normally do:
+
+```bash
+cd path/to/your/project
+code .
+```
+
+### You can also run the container manually
+
+```bash
+make run HOST_PATH_TO_PROJECT=/path/to/your/project
+```
+Note:
 We are forwarding X11 session and PulseAudio into the container, this is the reason why only Linux distributions are currently supported.
-
-# Expose source code to the container
-
-Adjust `HOST_PATH_TO_PROJECT` and `CONTAINER_PATH_TO_MOUNT_PROJECT` in `.makerc`
 
 # Extensions
 
